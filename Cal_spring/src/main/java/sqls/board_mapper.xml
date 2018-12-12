@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="com.hk.cal">
+  
+  <select id="getCalViewList" resultType="CalDto">
+  <!--[CDATA[ 
+  	SELECT A.AC_NAME, B.AC_SCORE, 
+	RANK() OVER (ORDER BY B.AC_SCORE DESC) AS RK
+	FROM ACADEMY A, AC_COMMENT B
+	WHERE A.AC_NAME = B.AC_NAME
+	AND ROWNUM<=3
+	]]-->
+  </select>
+  
+  <select id="getCalList" resultType="CalDto">
+  	SELECT AC_SEQ,AC_NAME,AC_CLASS,AC_CRE_DATE,AC_LOCATION
+  	FROM ACADEMY
+  </select>
+  
+  <select id=" getCalBoard" resultType="CalDto" parameterType="int">
+	  
+  </select>
+  
+  </mapper>
