@@ -10,6 +10,6 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
-<a href="calendar.do">캘린더</a>
+
 </body>
 </html>

@@ -5,7 +5,7 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias type="com.hk.cal.dtos" alias="CalDto" />
+		<typeAlias type="com.hk.cal.dtos.CalDto" alias="CalDto" />
 	</typeAliases>
 	
 	<mappers>

@@ -1,3 +1,7 @@
+<%@page import="com.hk.cal.daos.CalDao"%>
+<%@page import="com.hk.cal.util.Util"%>
+<%@page import="java.util.Calendar"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%request.setCharacterEncoding("utf-8"); %>
 <%response.setContentType("text/html; charset=utf-8"); %>
@@ -6,18 +10,118 @@
 <head>
 <style>
 .srchTraArea1, .process_Kword{ list-style-type: none;  }
-.process_Kword{ float: left; }  
-h2{ float: left;}
-#Calendar{ float: inherit; }
+
+  #caltable{
+      border-collapse: collapse;
+      margin-left: 30px;
+   }
+   
+   #caltable th{
+      border: 1px solid grey;
+   }
+   
+   #caltable td{
+      border: 1px solid grey;
+      background-color: white;      
+      width: 120px;
+      height: 120px;
+        text-align:left;
+        vertical-align: top;
+      position : relative;   
+   }
+   .lastDayNum {
+      display : none;
+   }
+   a {
+      text-decoration: none;   
+   }
+   
+   a:link {
+      color : black;
+   }
+   
+   a:visited {
+      color : black;
+   
+   }
+   
+   a:active {
+      color : #2E2EFE;
+   
+   }
+   
+   .cPreview {
+      background-color: #2E2EFE;
+      color: white;
+      font-weight: bold;
+      position: absolute;   
+      top:-25px;
+      left:-30px;
+      width:40px;
+      height:40px;
+      border-radius: 40px 40px 1px 40px ;
+      text-align: center;
+        line-height: 40px;
+   }
+   
+   
+   p{
+      color: white;
+      background-color: #2E2EFE;
+      font-weight: bold;
+      margin: 3px 0;
+   }
 </style>
+<script type="text/javascript">
+
+
+
+
+</script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>캘린더</title>
 </head>
+<%
+	String paramYear=request.getParameter("year");
+	String paramMonth=request.getParameter("month");
+	
+	Calendar cal=Calendar.getInstance();
+	int year = cal.get(Calendar.YEAR);
+	int month = cal.get(Calendar.MONTH)+1;
+	int day = cal.get(Calendar.DATE);
+	
+	if(paramYear != null){
+		year=Integer.parseInt(paramYear);
+	}
+	if(paramMonth != null){
+		month=Integer.parseInt(paramMonth);
+	}
+	
+	if(month>12){
+		month=1;
+		year++;
+	}
+	if(month<1){//월이 감소하다 1보다 작아지면 0,-1,-2..되는 거 처리
+		month=12;
+		year--;
+	}
+	//----------------------------------------------------
+	cal.set(year, month-1, 1);	
+	int dayOfWeek=cal.get(Calendar.DAY_OF_WEEK);//1일의 요일을 구함
+	int lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	
+	CalDao dao=new CalDao();
+	/* List<CalDto> clist=dao.getCalView("한경컴퓨터학원", yyyyMMdd); */
+	
+/* 	CalDao dao=new CalDao();
+	String yyyyMM=year+Util.isTwo(String.valueOf(month));//또하나 month+""
+	List<CalDto> cList=dao.getCalView("kbj", yyyyMM); */
+%>
 <body>
    <div id="search_bar">
       <div id="area" >
       <h2>지역</h2>
-      <ul class="srchTraArea1" style="float:left; width:12%">
+      <ul class="srchTraArea1">
          <li><input type="checkbox" name="chk_area" value="서울">서울</li>
          <li><input type="checkbox" name="chk_area" value="경기">경기</li>
          <li><input type="checkbox" name="chk_area" value="인천">인천</li>
@@ -31,7 +135,7 @@ h2{ float: left;}
       </div>
       <div id="kword" >
          <h2>과정</h2>
-         <ul class="process_Kword" style="float:left; width:12%">
+         <ul class="process_Kword">
             <li><input type="checkbox" name="chk_lang" value="C">C</li>
             <li><input type="checkbox" name="chk_lang" value="C++">C++</li>
             <li><input type="checkbox" name="chk_lang" value="JAVA">JAVA</li>
@@ -42,23 +146,23 @@ h2{ float: left;}
             <li><input type="checkbox" name="chk_lang" value="JAVASCRIPT">JAVASCRIPT</li>
          </ul>
       </div>
-      <div id="aca_name" style="float:left; width:12%">
+      <div id="aca_name">
       <!-- <input type="text" class="w100p" id="trainstCstmrNm" name="trainstCstmrNm" value=""> -->
       <h2>학원명</h2>
          <span><input type="text" name="academy_name" id="AcademyName"></span>
          <span><button id="search" onclick="SearchFunc()" style="float:left;">검색</button></span>
       </div>
    </div>
-   
+
    <div id="Calendar">
-      <h1>일정달력표시</h1>
-         <%-- <caption>
-            <a href="calendar.jsp?year=<%=year-1%>&month=<%=month%>">◁</a>
-            <a href="calendar.jsp?year=<%=year%>&month=<%=month-1%>">◀</a>
+   <table id="caltable">
+          <caption>
+            <a href="calendar.do?year=<%=year-1%>&month=<%=month%>">◁</a>
+            <a href="calendar.do?year=<%=year%>&month=<%=month-1%>">◀</a>
             <span class="y"><%=year%></span>년 <span class="m"><%=month%></span>월
-            <a href="calendar.jsp?year=<%=year%>&month=<%=month+1%>">▶</a>
-            <a href="calendar.jsp?year=<%=year+1%>&month=<%=month%>">▷</a>
-         </caption> --%>
+            <a href="calendar.do?year=<%=year%>&month=<%=month+1%>">▶</a>
+            <a href="calendar.do?year=<%=year+1%>&month=<%=month%>">▷</a>
+         </caption> 
       <tr>
          <th>일</th>
          <th>월</th>
@@ -68,12 +172,41 @@ h2{ float: left;}
          <th>금</th>
          <th>토</th>
       </tr>
+      <tr>
+  <%
+      for(int i=0;i<dayOfWeek-1;i++){
+         out.print("<td>&nbsp;</td>");
+      }
+   
+      for(int i=1;i<=lastDay;i++){
+         %>
+         <td>
+            <a style="color:<%=Util.fontColor(i, dayOfWeek)%>" class="dateNum"">
+               <%=i%>
+            </a>
+            
+            	<a href="calDetail.do?<%-- year=<%=year%>&month=<%=month%>&date=<%=i%> --%>">학원명
+            </a>
+            <div class="clist">
+          <c:forEach items="${getCalList}" var="CalDto">
+            	<c:out value="${dto.ac_name}"/>
+          </c:forEach>
+				<%-- <%=Util.getCalViewList(i, clist)%> --%>
+			</div>
+          </td>
+         <% 
+         //행을 바꿔주기---> 토요일은 공백수+현재날짜==7배수
+         if((dayOfWeek-1+i)%7==0){//토요일이냐??
+            out.print("</tr><tr>");
+         }
+      }// 날짜 출력 for문 종료
+       for(int i =0; i<(7-((dayOfWeek-1+lastDay)%7))%7;i++)
+         out.print("<td>&nbsp;</td>"); 
+   %>
 
-      
-      <button type="button" id="CartAcademyCal" onclick="location.href='cartAcademyCal.do'" >찜한 학원일정 보기</button>
-      
-   
-   
-   </div>
+      </tr>
+</table>
+</div>
+    <button type="button" id="CartAcademyCal" onclick="location.href='cartAcademyCal.do'" >찜한 학원일정 보기</button>
 </body>
 </html>

@@ -5,19 +5,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>캘린더상세보기</title>
-<h2>캘린더상세보기</h2>
-<table id="calDetailTable">
-<tr>
-	<th>학원명
-	<th>과정명
-	<th>개강일
-</tr>
-
-
-
-</table>
+<title></title>
 </head>
 <body>
+<a href="calendar.do">캘린더</a>
 </body>
 </html>

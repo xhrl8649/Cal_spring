@@ -3,25 +3,30 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-  <mapper namespace="com.hk.cal">
+ <mapper namespace="com.hk.cal">
   
-  <select id="getCalViewList" resultType="CalDto">
-  <!--[CDATA[ 
-  	SELECT A.AC_NAME, B.AC_SCORE, 
+  	<resultMap type="com.hk.cal.dtos.CalDto" id="CalDto">
+  		<result property="ac_name" column="AC_NAME"/>
+  	</resultMap>
+  	
+  <select id="getCalList" resultMap="CalDto"> 
+  	<![CDATA[
+  	SELECT A.AC_NAME, 
 	RANK() OVER (ORDER BY B.AC_SCORE DESC) AS RK
-	FROM ACADEMY A, AC_COMMENT B
+	FROM ACADEMYY A, AC_COMMENT B
 	WHERE A.AC_NAME = B.AC_NAME
 	AND ROWNUM<=3
-	]]-->
+	]]>
   </select>
   
-  <select id="getCalList" resultType="CalDto">
-  	SELECT AC_SEQ,AC_NAME,AC_CLASS,AC_CRE_DATE,AC_LOCATION
-  	FROM ACADEMY
+  <!-- 평점에 따른 랭킹순으로 바꿔야함 -->
+  <select id="getAC_Cre_date">
+  	SELECT AC_NAME FROM ACADEMY WHERE AC_CRE_DATE LIKE '2018-01-02%'; 
   </select>
-  
+  <!-- 일정 상세보기 -->
   <select id=" getCalBoard" resultType="CalDto" parameterType="int">
-	  
+	SELECT AC_SEQ,AC_NAME,AC_CLASS,AC_CRE_DATE,AC_LOCATION
+  	FROM ACADEMYY WHERE AC_NAME = #{ac_name}
   </select>
   
   </mapper>

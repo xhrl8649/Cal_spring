@@ -74,7 +74,7 @@ public class CalDto implements Serializable {
 		this.ac_location = ac_location;
 	}
 
-	public String getAc_cre_date() {
+	public static String getAc_cre_date() {
 		return ac_cre_date;
 	}
 
