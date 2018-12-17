@@ -6,12 +6,19 @@
  <mapper namespace="com.hk.cal">
   
   	<resultMap type="com.hk.cal.dtos.CalDto" id="CalDto">
+  		<result property="m_seq" column="M_SEQ"/>
+  		<result property="m_id" column="M_ID"/> 
+  		<result property="ac_seq" column="AC_SEQ"/>
   		<result property="ac_name" column="AC_NAME"/>
+  		<result property="ac_class" column="AC_CLASS"/>	
+  		<result property="ac_location" column="AC_LOCATION"/>
+  		<result property="ac_cre_date" column="AC_CRE_DATE"/>	
+  		<result property="rk" column="RK"/>	
   	</resultMap>
   	
   <select id="getCalList" resultMap="CalDto"> 
   	<![CDATA[
-  	SELECT A.AC_NAME, 
+  	SELECT A.AC_NAME, A.AC_CRE_DATE,
 	RANK() OVER (ORDER BY B.AC_SCORE DESC) AS RK
 	FROM ACADEMYY A, AC_COMMENT B
 	WHERE A.AC_NAME = B.AC_NAME

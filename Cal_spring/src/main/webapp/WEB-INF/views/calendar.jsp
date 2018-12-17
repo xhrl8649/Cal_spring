@@ -1,3 +1,6 @@
+<%@page import="com.hk.cal.service.CalService"%>
+<%@page import="com.hk.cal.dtos.CalDto"%>
+<%@page import="java.util.List"%>
 <%@page import="com.hk.cal.daos.CalDao"%>
 <%@page import="com.hk.cal.util.Util"%>
 <%@page import="java.util.Calendar"%>
@@ -116,6 +119,8 @@
 /* 	CalDao dao=new CalDao();
 	String yyyyMM=year+Util.isTwo(String.valueOf(month));//또하나 month+""
 	List<CalDto> cList=dao.getCalView("kbj", yyyyMM); */
+	
+	//--------------------------------------------------------
 %>
 <body>
    <div id="search_bar">
@@ -181,17 +186,14 @@
       for(int i=1;i<=lastDay;i++){
          %>
          <td>
-            <a style="color:<%=Util.fontColor(i, dayOfWeek)%>" class="dateNum"">
+            <a style="color:<%=Util.fontColor(i, dayOfWeek)%>" class="dateNum">
                <%=i%>
-            </a>
-            
-            	<a href="calDetail.do?<%-- year=<%=year%>&month=<%=month%>&date=<%=i%> --%>">학원명
-            </a>
+            </a>             	
             <div class="clist">
-          <c:forEach items="${getCalList}" var="CalDto">
-            	<c:out value="${dto.ac_name}"/>
+          <c:forEach items="${calViewList}" var="list">
+         		<a href="calDetail.do?year="${list.ac_cre_date}">
+            <c:out value="${list.ac_name}"/>
           </c:forEach>
-				<%-- <%=Util.getCalViewList(i, clist)%> --%>
 			</div>
           </td>
          <% 
@@ -203,7 +205,6 @@
        for(int i =0; i<(7-((dayOfWeek-1+lastDay)%7))%7;i++)
          out.print("<td>&nbsp;</td>"); 
    %>
-
       </tr>
 </table>
 </div>

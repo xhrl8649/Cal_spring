@@ -10,7 +10,7 @@ public class CalDto implements Serializable {
 	private String ac_class; //과정명
 	private String ac_location; //지역명
 	private String ac_cre_date; //개강일
-	
+	private String rk;
 	public CalDto() {
 	}
 
@@ -74,12 +74,22 @@ public class CalDto implements Serializable {
 		this.ac_location = ac_location;
 	}
 
-	public static String getAc_cre_date() {
+	
+	public String getAc_cre_date() {
 		return ac_cre_date;
 	}
 
 	public void setAc_cre_date(String ac_cre_date) {
 		this.ac_cre_date = ac_cre_date;
+	}
+	
+
+	public String getRk() {
+		return rk;
+	}
+
+	public void setRk(String rk) {
+		this.rk = rk;
 	}
 
 	@Override

@@ -12,8 +12,8 @@ public class Util {
 	//action 태그에 usebean태그는 객체를 담고 가져오는 기능을 구현--> dto객체
 	private String toDates;
 	
-	public static String  getCalViewList(int i, List<CalDto> clist) {
-		String day=CalDto.getAc_cre_date().substring(8, 10);
+	public static String getCalViewList(int i, List<CalDto> clist) {
+		String day=(i+"").substring(8, 10);
 		String calList=""; 
 		for(CalDto calDto : clist) {
 			if(calDto.getAc_cre_date().subSequence(6, 8).equals(day)) {
@@ -26,7 +26,8 @@ public class Util {
 		return calList;
 	}
 	
-	public void setToDates(String mDate, String m ) {
+	
+/*	public void setToDates(String mDate, String m) {
 		//날짜형식: yyyy-MM-dd
 		//Date타입으로 변환하려면 해당 문자열을 Date형식으로 만들어야한다
 		String year=mDate.substring(0, 4);
@@ -36,7 +37,7 @@ public class Util {
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy년MM월dd일 ");
 		Timestamp tm=Timestamp.valueOf(m);//문자열을 Date타입으로 변환
 		this.toDates=sdf.format(tm);
-	}
+	}*/
 	
 	public String getToDates() {
 		return toDates;

@@ -51,6 +51,7 @@ public class HomeController {
 	public String Calendar(HttpServletRequest request, Locale locale, Model model) {
 		
 		List<CalDto> calViewList = calService.getCalList();
+		System.out.println(calViewList.size());
 		model.addAttribute("calViewList", calViewList);	
 		return "calendar";
 	}
