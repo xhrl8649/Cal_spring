@@ -13,6 +13,7 @@
   		<result property="ac_class" column="AC_CLASS"/>	
   		<result property="ac_location" column="AC_LOCATION"/>
   		<result property="ac_cre_date" column="AC_CRE_DATE"/>	
+  		<result property="ac_end_date" column="AC_END_DATE"/>	
   		<result property="rk" column="RK"/>	
   	</resultMap>
   	
@@ -30,10 +31,11 @@
   <select id="getAC_Cre_date">
   	SELECT AC_NAME FROM ACADEMY WHERE AC_CRE_DATE LIKE '2018-01-02%'; 
   </select>
+  
   <!-- 일정 상세보기 -->
-  <select id=" getCalBoard" resultType="CalDto" parameterType="int">
-	SELECT AC_SEQ,AC_NAME,AC_CLASS,AC_CRE_DATE,AC_LOCATION
-  	FROM ACADEMYY WHERE AC_NAME = #{ac_name}
+  <select id=" getCalBoard" resultType="CalDto" parameterType="String">
+	SELECT AC_NAME,AC_CLASS,AC_CRE_DATE,AC_LOCATION,AC_END_DATE
+  	FROM ACADEMY WHERE AC_NAME LIKE '%'||#{ac_name}||'%'
   </select>
   
   </mapper>

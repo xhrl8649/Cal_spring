@@ -23,8 +23,8 @@ public class TestAddBatch {
         String user="SB";
         String password="73052896";
          
-        String sql = "INSERT INTO ACADEMY(AC_SEQ,AC_NAME,AC_CLASS,AC_CRE_DATE,AC_LOCATION) "
-        		+ "VALUES(AC_SEQ.NEXTVAL,?,?,?,?)";
+        String sql = "INSERT INTO ACADEMY(AC_SEQ,AC_NAME,AC_CLASS,AC_CRE_DATE,AC_LOCATION,AC_END_DATE) "
+        		+ "VALUES(AC_SEQ.NEXTVAL,?,?,?,?,?)";
 
         try{
             Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -37,7 +37,8 @@ public class TestAddBatch {
     			/*검색 조건분류*/
             	String AC_NAME = String.valueOf(datas.get(i).select("subTitle").text()); //학원명
             	String AC_CLASS = String.valueOf(datas.get(i).select("title").text()); //과정명
-              	String AC_CRE_DATE = String.valueOf(datas.get(i).select("traStartDate").text());  //개강일
+              	String AC_CRE_DATE = String.valueOf(datas.get(i).select("traStartDate").text()).trim();  //개강일
+              	String AC_END_DATE = String.valueOf(datas.get(i).select("traEndDate").text()).trim();  //종강일
             	String AC_LOCATION = String.valueOf(datas.get(i).select("address").text()); //지역명   
   
     			/*과정상세페이지에서 불러올 정보*/
@@ -48,6 +49,8 @@ public class TestAddBatch {
                  pstmt.setString(2, AC_CLASS);
                  pstmt.setString(3, AC_CRE_DATE);
                  pstmt.setString(4, AC_LOCATION);
+                 pstmt.setString(5, AC_END_DATE);
+                 
             	
                 // addBatch에 담기
                 pstmt.addBatch();

@@ -1,3 +1,4 @@
+<%@page import="org.apache.catalina.tribes.io.DirectByteArrayOutputStream"%>
 <%@page import="com.hk.cal.service.CalService"%>
 <%@page import="com.hk.cal.dtos.CalDto"%>
 <%@page import="java.util.List"%>
@@ -5,12 +6,14 @@
 <%@page import="com.hk.cal.util.Util"%>
 <%@page import="java.util.Calendar"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%request.setCharacterEncoding("utf-8"); %>
 <%response.setContentType("text/html; charset=utf-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <style>
 .srchTraArea1, .process_Kword{ list-style-type: none;  }
 
@@ -67,7 +70,6 @@
         line-height: 40px;
    }
    
-   
    p{
       color: white;
       background-color: #2E2EFE;
@@ -76,7 +78,22 @@
    }
 </style>
 <script type="text/javascript">
-
+	$(function(){
+		 //현재 마우스 이벤트가 발생된 .countView 태그의 a를 구해줌
+		var DAY = $(".dateNum").text().trim();
+		var MONTH = $(".m").text().trim();
+		var YEAR = $(".y").text().trim();
+		console.log(YEAR+MONTH+DAY);
+		var yyyyMMdd= [];
+	}),
+	$("#dateNum").click(function(){
+		var countView = $(this);
+		var YEAR=$(".y").text().trim();
+		var MONTH=$(".m").text().trim();
+		var date= countView.text().trim();
+		var yyyyMMdd=YEAR+MONTH+date;
+		alert(yyyyMMdd);
+	});
 
 
 
@@ -93,7 +110,9 @@
 	int month = cal.get(Calendar.MONTH)+1;
 	int day = cal.get(Calendar.DATE);
 	
-	if(paramYear != null){
+	
+  	
+  	if(paramYear != null){
 		year=Integer.parseInt(paramYear);
 	}
 	if(paramMonth != null){
@@ -114,6 +133,8 @@
 	int lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	
 	CalDao dao=new CalDao();
+	/* List<CalDto> clist = dao.getCalList(); //DB값목록 가져오기 */
+
 	/* List<CalDto> clist=dao.getCalView("한경컴퓨터학원", yyyyMMdd); */
 	
 /* 	CalDao dao=new CalDao();
@@ -124,9 +145,11 @@
 	
 %>
 <body>
-   <div id="search_bar">
-      <div id="area" >
+<%-- <% Util util =new Util(); util.setArrowNbsp(depth); %> --%>
+<jsp:useBean id="util" class="com.hk.cal.util.Util" />
       <h2>지역</h2>
+      <div id="Search">
+       <div id="area" >
       <ul class="srchTraArea1">
          <li><input type="checkbox" name="chk_area" value="서울">서울</li>
          <li><input type="checkbox" name="chk_area" value="경기">경기</li>
@@ -180,6 +203,7 @@
       </tr>
       <tr>
   <%
+
       for(int i=0;i<dayOfWeek-1;i++){
          out.print("<td>&nbsp;</td>");
       }
@@ -189,12 +213,31 @@
          <td>
             <a style="color:<%=Util.fontColor(i, dayOfWeek)%>" class="dateNum">
                <%=i%>
-            </a>             	
-            <div class="clist">
-          <c:forEach items="${calViewList}" var="list">
-         		<a href="calDetail.do?year="${list.ac_cre_date}">
+               <%
+               String yyyyMMdddd =year+"-"+Util.isTwo(String.valueOf(month))+"-"+Util.isTwo(String.valueOf(i));
+             	pageContext.setAttribute("yyyyMMdddd", yyyyMMdddd.trim());
+               %>
+            </a>   
+	          <div class="clist">
+	            <c:set var="yyyyMMdddd" value="${yyyyMMdddd}" ></c:set>
+	          
+	            <c:forEach items="${calViewList}" var="list">
+				<c:set var="ac_cre_date" value="${list.ac_cre_date}"/>  
+	           	<c:choose>
+				  <c:when test="${yyyyMMdddd eq ac_cre_date}">
+				  <a href=calDetail.do?ac_name=<c:url value="${list.ac_name}"></c:url>&ac_cre_date=<c:url value="${list.ac_cre_date}"></c:url>>
+            		<c:out value="${list.ac_name}"/><br /></a>
+				  </c:when>
+				    <c:otherwise>		
+				    </c:otherwise>
+				</c:choose>
+	           </c:forEach> 
+        <%--   <c:forEach items="${calViewList}" var="list">
+         		<a href="calDetail.do?ac_name="${list.ac_name}">
+         		<a href=calDetail.do?ac_name=<c:url value="${list.ac_name}"></c:url>&ac_cre_date=<c:url value="${list.ac_cre_date}"></c:url>>
             <c:out value="${list.ac_name}"/>
-          </c:forEach>
+            <c:out value="${list.ac_cre_date}"/><br  /></a>
+          </c:forEach> --%>
 			</div>
           </td>
          <% 
@@ -202,6 +245,7 @@
          if((dayOfWeek-1+i)%7==0){//토요일이냐??
             out.print("</tr><tr>");
          }
+       
       }// 날짜 출력 for문 종료
        for(int i =0; i<(7-((dayOfWeek-1+lastDay)%7))%7;i++)
          out.print("<td>&nbsp;</td>"); 

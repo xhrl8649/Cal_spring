@@ -10,6 +10,7 @@ public class CalDto implements Serializable {
 	private String ac_class; //과정명
 	private String ac_location; //지역명
 	private String ac_cre_date; //개강일
+	private String ac_end_date; //종강일
 	private String rk;
 	public CalDto() {
 	}
@@ -24,6 +25,7 @@ public class CalDto implements Serializable {
 		this.ac_class = ac_class;
 		this.ac_location = ac_location;
 		this.ac_cre_date = ac_cre_date;
+		this.ac_end_date = ac_end_date;
 	}
 
 	public int getM_seq() {
@@ -83,6 +85,14 @@ public class CalDto implements Serializable {
 		this.ac_cre_date = ac_cre_date;
 	}
 	
+
+	public String getAc_end_date() {
+		return ac_end_date;
+	}
+
+	public void setAc_end_date(String ac_end_date) {
+		this.ac_end_date = ac_end_date;
+	}
 
 	public String getRk() {
 		return rk;
